@@ -11,7 +11,7 @@
 
 <body>
     <header>
-        <h1>Menu</h1>
+        <h1></h1>
         <nav>
             <button class="menu-item" data-kategori="alle">Alle Retter</button>
             <button class="menu-item" data-kategori="forretter">Forretter</button>
@@ -59,6 +59,7 @@
         function visRetter() {
             let temp = document.querySelector(".retTemplate");
             let dest = document.querySelector(".retContainer");
+            document.querySelector("header h1").textContent = retFilter;
             retter.forEach(ret => {
                 if (ret.kategori == retFilter || retFilter == "alle") {
                     let klon = temp.cloneNode(true).content;
