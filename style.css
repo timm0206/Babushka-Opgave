@@ -40,3 +40,42 @@ h1 {
     margin-top: 0px;
     padding-top: 10px;
 }
+
+/* Styling til ret-informationen */
+article p {}
+
+footer .tider li {
+    display: inline;
+    margin: 30px;
+}
+
+.retContainer {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+@media screen and (max-width: 1229px) {
+    .retContainer {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media screen and (max-width: 830px) {
+    .ret img {
+        width: 100%
+    }
+
+    .retContainer {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media screen and (max-width: 425px) {
+    .ret img {
+        width: 100%
+    }
+
+    .retContainer {
+        grid-template-columns: 1fr;
+    }
+}

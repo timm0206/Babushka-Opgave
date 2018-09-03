@@ -7,49 +7,19 @@
     <title>Babushka Opgave</title>
     <link rel="stylesheet" href="style.css">
 
-    <style>
-        .retContainer {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-        }
-
-        @media screen and (max-width: 1229px) {
-            .retContainer {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-
-        @media screen and (max-width: 830px) {
-            .ret img {
-                width: 100%
-            }
-
-            .retContainer {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media screen and (max-width: 425px) {
-            .ret img {
-                width: 100%
-            }
-
-            .retContainer {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
 </head>
 
 <body>
     <header>
         <h1>Menu</h1>
         <nav>
-            <button class="alle">Alle</button>
-            <button class="forretter">Forretter</button>
-            <button class="hovedretter">Hovedretter</button>
-            <button class="desserter">Desserter</button>
-            <button class="drikkevarer">Drikkevarer</button>
+            <button class="menu-item" data-kategori="alle">Alle Retter</button>
+            <button class="menu-item" data-kategori="forretter">Forretter</button>
+            <button class="menu-item" data-kategori="hovedretter">Hovedretter</button>
+            <button class="menu-item" data-kategori="desserter">Desserter</button>
+            <button class="menu-item" data-kategori="sideorders">Sideorders</button>
+            <button class="menu-item" data-kategori="drikkevarer">Drikkevarer</button>
+
         </nav>
     </header>
 
@@ -57,17 +27,18 @@
 
     <template class="retTemplate">
         <article class="ret">
-            <h2 class="overskrift" data-navn>---</h2>
-            <img class="billede" data-billede src=".---" alt="---">
-            <p class="kortBeskrivelse" data-kortbeskrivelse>---</p>
-            <p>Pris: <span class="pris" data-pris>---</span>, - </p>
+            <h2 class="overskrift" data-navn></h2>
+            <img class="billede" data-billede src="" alt="">
+            <p class="kortBeskrivelse" data-kortbeskrivelse></p>
+            <p>Pris: <span class="pris" data-pris></span></p>
         </article>
     </template>
 
-    <footer></footer>
     <script>
-        let retter = [];
         document.addEventListener("DOMContentLoaded", hentJson);
+
+        let dest = document.querySelector(".retContainer"),
+            retter, retFilter = "alle";
 
         async function hentJson() {
             let jsonData = await fetch("menu.json");
@@ -75,20 +46,43 @@
             visRetter();
         }
 
+        document.querySelectorAll(".menu-item").forEach(knap => {
+            knap.addEventListener("click", retFiltrering)
+        });
+
+        function retFiltrering() {
+            dest.textContent = "";
+            retFilter = this.getAttribute("data-kategori");
+            visRetter();
+        }
+
         function visRetter() {
             let temp = document.querySelector(".retTemplate");
             let dest = document.querySelector(".retContainer");
             retter.forEach(ret => {
-                let klon = temp.cloneNode(true).content;
-                klon.querySelector("[data-navn]").textContent = ret.navn;
-                klon.querySelector("[data-billede]").src = "imgs/small/" + ret.billede + "-sm.jpg";
-                klon.querySelector("[data-billede]").alt = "Billede af " + ret.navn;
-                klon.querySelector("[data-kortbeskrivelse]").textContent = ret.kortbeskrivelse;
-                klon.querySelector("[data-pris]").textContent = ret.pris;
-                dest.appendChild(klon);
+                if (ret.kategori == retFilter || retFilter == "alle") {
+                    let klon = temp.cloneNode(true).content;
+                    klon.querySelector("[data-navn]").textContent = ret.navn;
+                    klon.querySelector("[data-billede]").src = "imgs/small/" + ret.billede + "-sm.jpg";
+                    klon.querySelector("[data-kortbeskrivelse]").textContent = ret.kortbeskrivelse;
+                    klon.querySelector("[data-pris]").textContent = ret.pris;
+                    dest.appendChild(klon);
+                }
             });
         }
     </script>
+
+    <footer>
+        <div class="tider">
+            <li>Mandag</li>
+            <li>Tirsdag</li>
+            <li>Onsdag</li>
+            <li>Torsdag</li>
+            <li>Fredag</li>
+            <li>Lørdag</li>
+            <li>Søndag</li>
+        </div>
+    </footer>
 
 </body>
 
