@@ -10,6 +10,20 @@
 </head>
 
 <body>
+
+    <section id="modal">
+
+        <div id="modal-content">
+            <button>close</button>
+
+            <h2 class="modal-navn"></h2>
+            <img src="" alt="" class="modal-billede">
+            <p class="langBeskrivelse" data-langbeskrivelse></p>
+            <p>Opringelse: <span class="oprindelsesregion" data-oprindelsesregion></span></p>
+        </div>
+    </section>
+
+
     <header>
         <h1></h1>
         <nav>
@@ -65,24 +79,34 @@
                     let klon = temp.cloneNode(true).content;
                     klon.querySelector("[data-navn]").textContent = ret.navn;
                     klon.querySelector("[data-billede]").src = "imgs/small/" + ret.billede + "-sm.jpg";
+                    klon.querySelector("img").addEventListener("click", () => {
+                        visModal(ret);
+                    });
                     klon.querySelector("[data-kortbeskrivelse]").textContent = ret.kortbeskrivelse;
                     klon.querySelector("[data-pris]").textContent = ret.pris;
                     dest.appendChild(klon);
                 }
             });
         }
+
+        function visModal(retten) {
+            modal.classList.add("vis");
+            modal.querySelector(".modal-navn").textContent = retten.navn;
+            modal.querySelector(".modal-billede").src = "imgs/small/" + retten.billede + "-sm.jpg";
+            modal.querySelector(".modal-navn").alt = "Photo af" + retten.navn;
+            modal.querySelector(".langBeskrivelse").textContent = retten.langbeskrivelse;
+            modal.querySelector(".oprindelsesregion").textContent = retten.oprindelsesregion;
+            modal.querySelector("button").addEventListener("click", skjulmodal);
+
+        }
+
+        function skjulmodal() {
+            modal.classList.remove("vis");
+            //window.scrollTo(0)
+        }
     </script>
 
     <footer>
-        <div class="tider">
-            <li>Mandag</li>
-            <li>Tirsdag</li>
-            <li>Onsdag</li>
-            <li>Torsdag</li>
-            <li>Fredag</li>
-            <li>Lørdag</li>
-            <li>Søndag</li>
-        </div>
     </footer>
 
 </body>
