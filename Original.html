@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="da">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Babushka Opgave</title>
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+    <header>
+        <h1></h1>
+        <nav>
+            <button class="menu-item" data-kategori="alle">Alle Retter</button>
+            <button class="menu-item" data-kategori="forretter">Forretter</button>
+            <button class="menu-item" data-kategori="hovedretter">Hovedretter</button>
+            <button class="menu-item" data-kategori="desserter">Desserter</button>
+            <button class="menu-item" data-kategori="sideorders">Sideorders</button>
+            <button class="menu-item" data-kategori="drikkevarer">Drikkevarer</button>
+
+        </nav>
+    </header>
+
+    <main class="retContainer"> </main>
+
+    <template class="retTemplate">
+        <article class="ret">
+            <h2 class="overskrift" data-navn></h2>
+            <img class="billede" data-billede src="" alt="">
+            <p class="kortBeskrivelse" data-kortbeskrivelse></p>
+            <p>Pris: <span class="pris" data-pris></span>, </p>
+        </article>
+    </template>
+
+    <script>
+        let dest = document.querySelector(".retContainer"),
+            retter, menuFilter = "alle";
+
+        document.addEventListener("DOMContentLoaded", hentJson);
+
+        async function hentJson() {
+            let jsonData = await fetch("menu.json");
+            retter = await jsonData.json();
+            visRetter();
+        }
+
+        document.querySelectorAll(".menu-item").forEach(knap => {
+            knap.addEventListener("click", filtrering)
+        });
+
+        function filtrering() {
+            dest.textContent = "";
+            menuFilter = this.getAttribute("data-kategori");
+            visRetter();
+        }
+
+        function visRetter() {
+            let temp = document.querySelector(".retTemplate");
+            let dest = document.querySelector(".retContainer");
+            document.querySelector("header h1").textContent = menuFilter;
+            retter.forEach(ret => {
+                if (ret.kategori == menuFilter || menuFilter == "alle") {
+                    let klon = temp.cloneNode(true).content;
+                    klon.querySelector("[data-navn]").textContent = ret.navn;
+                    klon.querySelector("[data-billede]").src = "imgs/small/" + ret.billede + "-sm.jpg";
+                    klon.querySelector("[data-billede]").addEventListener("click", () => {
+                        window.location.href = "single.html?id=" + ret.id;
+                    })
+                    klon.querySelector("[data-kortbeskrivelse]").textContent = ret.kortbeskrivelse;
+                    klon.querySelector("[data-pris]").textContent = ret.pris;
+                    dest.appendChild(klon);
+                }
+            });
+        }
+    </script>
+
+    <footer>
+    </footer>
+
+</body>
+
+</html>

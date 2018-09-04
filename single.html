@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="da">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Babushka Opgave</title>
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+    <header>
+        <h1></h1>
+        <nav>
+            <button class="menu-item" data-kategori="alle">Alle Retter</button>
+            <button class="menu-item" data-kategori="forretter">Forretter</button>
+            <button class="menu-item" data-kategori="hovedretter">Hovedretter</button>
+            <button class="menu-item" data-kategori="desserter">Desserter</button>
+            <button class="menu-item" data-kategori="sideorders">Sideorders</button>
+            <button class="menu-item" data-kategori="drikkevarer">Drikkevarer</button>
+
+        </nav>
+    </header>
+
+    <main class="retContainer">
+        <section class="singleContainer">
+            <article class="ret">
+                <h2 class="overskrift" data-navn></h2>
+                <img class="billede" data-billede src="" alt="">
+                <p class="kortBeskrivelse" data-kortbeskrivelse></p>
+                <p>Pris: <span class="pris" data-pris></span>, </p>
+            </article>
+        </section>
+    </main>
+
+    <script>
+        let urlParams = new URLSearchParams(window.location.search);
+        let id = urlParams.get("id");
+
+        let dest = document.querySelector(".retContainer"),
+            retter, menuFilter = "alle";
+
+        document.addEventListener("DOMContentLoaded", hentJson);
+
+        async function hentJson() {
+            let jsonData = await fetch("menu.json");
+            retter = await jsonData.json();
+            visRetter();
+        }
+
+        document.querySelectorAll(".menu-item").forEach(knap => {
+            knap.addEventListener("click", filtrering)
+        });
+
+        function filtrering() {
+            dest.textContent = "";
+            menuFilter = this.getAttribute("data-kategori");
+            visRetter();
+        }
+
+        function visRetter() {
+            let dest = document.querySelector(".retContainer");
+            document.querySelector("header h1").textContent = menuFilter;
+            retter.forEach(ret => {
+                if (ret.id == id) {
+                    dest.querySelector("[data-navn]").textContent = ret.navn;
+                    dest.querySelector("[data-billede]").src = "imgs/small/" + ret.billede + "-sm.jpg";
+                    dest.querySelector("[data-kortbeskrivelse]").textContent = ret.kortbeskrivelse;
+                    dest.querySelector("[data-pris]").textContent = ret.pris;
+                }
+            });
+        }
+    </script>
+
+    <footer>
+    </footer>
+
+</body>
+
+</html>
